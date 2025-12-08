@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\JobType;
 use App\Models\JobApplication;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Validation\Rule;
 
 class JobApplicationController extends Controller
 {
@@ -32,6 +34,7 @@ class JobApplicationController extends Controller
             'applied_date' => 'required|date',
             'location' => 'nullable|string',
             'notes' => 'nullable|string',
+            'job_type' => ['required', Rule::enum(JobType::class)],
         ]);
 
         // AUTOMATICALLY set the user_id to the current user
@@ -67,6 +70,7 @@ class JobApplicationController extends Controller
             'applied_date' => 'required|date',
             'location' => 'nullable|string',
             'notes' => 'nullable|string',
+            'job_type' => ['required', Rule::enum(JobType::class)],
         ]);
 
         $jobApplication->update($validated);
