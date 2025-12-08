@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\JobType;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -18,6 +19,11 @@ class JobApplication extends Model
         'status',
         'applied_date',
         'notes',
+        'job_type',
+    ];
+
+    protected $casts = [
+        'job_type' => JobType::class,
     ];
 
     public function user()
