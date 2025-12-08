@@ -3,7 +3,10 @@
 @section('content')
 <div class="container mx-auto">
     <div class="flex justify-between items-center mb-6">
-        <h1 class="text-3xl font-bold text-gray-800">Job Applications</h1>
+        <h2 class="text-2xl font-bold text-gray-800">My Applications</h2>
+        <a href="{{ route('job-applications.create') }}" class="bg-indigo-600 text-white px-4 py-2 rounded-md hover:bg-indigo-700 transition">
+            + Add New Job
+        </a>
     </div>
 
     @if(session('success'))
@@ -17,14 +20,14 @@
         <div class="overflow-x-auto">
             <table class="min-w-full">
                 <thead class="bg-gray-100">
-                    <tr>
+                <tr>
                         <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Company Name</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Role</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Applied Date</th>
-                        <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
-                    </tr>
-                </thead>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Role</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Applied Date</th>
+                    <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                </tr>
+            </thead>
                 <tbody class="divide-y divide-gray-200">
                     @forelse ($applications as $app)
                     <tr>
@@ -60,7 +63,7 @@
                             </form>
                         </td>
                     </tr>
-                    @empty
+                @empty
                     <tr>
                         <td colspan="5" class="text-center py-10 text-gray-500">
                             <div class="flex flex-col items-center">
@@ -70,10 +73,10 @@
                             </div>
                         </td>
                     </tr>
-                    @endforelse
-                </tbody>
-            </table>
+                @endforelse
+            </tbody>
+        </table>
         </div>
     </div>
-</div>
+    </div>
 @endsection

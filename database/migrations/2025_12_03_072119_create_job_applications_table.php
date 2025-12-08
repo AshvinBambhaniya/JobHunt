@@ -13,6 +13,10 @@ return new class extends Migration
     {
         Schema::create('job_applications', function (Blueprint $table) {
             $table->id();
+
+            // 'constrained()' automatically looks for a 'id' on the 'users' table.
+            $table->foreignId('user_id')->constrained()->onDelete('cascade');
+            
             $table->string('company_name');
             $table->string('role');
             $table->string('location')->nullable();
