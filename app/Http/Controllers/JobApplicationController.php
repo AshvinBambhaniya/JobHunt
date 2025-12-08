@@ -35,6 +35,7 @@ class JobApplicationController extends Controller
             'location' => 'nullable|string',
             'notes' => 'nullable|string',
             'job_type' => ['required', Rule::enum(JobType::class)],
+            'expected_salary' => 'nullable|numeric',
         ]);
 
         // AUTOMATICALLY set the user_id to the current user
@@ -71,6 +72,7 @@ class JobApplicationController extends Controller
             'location' => 'nullable|string',
             'notes' => 'nullable|string',
             'job_type' => ['required', Rule::enum(JobType::class)],
+            'expected_salary' => 'nullable|numeric',
         ]);
 
         $jobApplication->update($validated);

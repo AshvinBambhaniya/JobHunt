@@ -20,6 +20,7 @@ class JobApplication extends Model
         'applied_date',
         'notes',
         'job_type',
+        'expected_salary',
     ];
 
     protected $casts = [
