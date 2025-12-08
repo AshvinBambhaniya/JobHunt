@@ -31,4 +31,14 @@ class JobApplication extends Model
     {
         return $this->belongsTo(User::class);
     }
+
+    public function logs()
+    {
+        return $this->hasMany(JobApplicationLog::class);
+    }
+
+    public function latestLog()
+    {
+        return $this->hasOne(JobApplicationLog::class)->latestOfMany();
+    }
 }
