@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\JobApplicationController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\JobApplicationLogController;
 
 // GROUP 1: Guests (Not logged in)
 Route::middleware('guest')->group(function () {
@@ -22,4 +23,5 @@ Route::middleware('auth')->group(function () {
     });
 
     Route::resource('job-applications', JobApplicationController::class);
+    Route::post('/job-applications/{job_application}/logs', [JobApplicationLogController::class, 'store'])->name('job-applications.logs.store');
 });

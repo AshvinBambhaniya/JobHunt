@@ -10,14 +10,31 @@ use Illuminate\Validation\Rule;
 
 class JobApplicationController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        // FILTER: Only get applications where user_id matches the logged-in user
-        $applications = JobApplication::where('user_id', Auth::id())
-            ->latest()
-            ->get();
+        $query = JobApplication::where('user_id', Auth::id());
 
-        return view('job_applications.index', compact('applications'));
+        if ($request->has('search')) {
+            $query->where(function ($q) use ($request) {
+                $q->where('company_name', 'like', '%' . $request->search . '%')
+                  ->orWhere('role', 'like', '%' . $request->search . '%');
+            });
+        }
+
+        if ($request->has('status') && $request->status != '') {
+            $query->where('status', $request->status);
+        }
+
+        if ($request->has('job_type') && $request->job_type != '') {
+            $query->where('job_type', $request->job_type);
+        }
+
+        $applications = $query->latest()->paginate(10);
+
+        return view('job_applications.index', [
+            'applications' => $applications,
+            'jobTypes' => JobType::cases(),
+        ]);
     }
 
     public function create()
@@ -30,7 +47,6 @@ class JobApplicationController extends Controller
         $validated = $request->validate([
             'company_name' => 'required|string|max:255',
             'role' => 'required|string|max:255',
-            'status' => 'required',
             'applied_date' => 'required|date',
             'location' => 'nullable|string',
             'notes' => 'nullable|string',
@@ -40,11 +56,29 @@ class JobApplicationController extends Controller
 
         // AUTOMATICALLY set the user_id to the current user
         $validated['user_id'] = Auth::id();
+        $validated['status'] = 'applied';
 
-        JobApplication::create($validated);
+        $application = JobApplication::create($validated);
+
+        $application->logs()->create([
+            'status' => 'applied',
+            'event_date' => $validated['applied_date'],
+        ]);
 
         return redirect()->route('job-applications.index')
             ->with('success', 'Job Application added successfully!');
+    }
+
+    public function show(JobApplication $jobApplication)
+    {
+        // SECURITY CHECK: Ensure user owns this record
+        if ($jobApplication->user_id !== Auth::id()) {
+            abort(403, 'Unauthorized action.');
+        }
+
+        $jobApplication->load('logs');
+
+        return view('job_applications.show', compact('jobApplication'));
     }
 
     public function edit(JobApplication $jobApplication)
@@ -67,7 +101,6 @@ class JobApplicationController extends Controller
         $validated = $request->validate([
             'company_name' => 'required|string|max:255',
             'role' => 'required|string|max:255',
-            'status' => 'required',
             'applied_date' => 'required|date',
             'location' => 'nullable|string',
             'notes' => 'nullable|string',
