@@ -1,0 +1,48 @@
+### Environment Files ###
+# Never add .env files to a container
+.env
+.env.*
+!/.env.example
+
+### Dependencies ###
+# Dependencies are installed in the container
+/vendor/
+/node_modules/
+
+### Git ###
+# The git repository is not needed
+.git/
+.gitignore
+.gitattributes
+
+### Testing ###
+# Tests are not needed in production
+/tests/
+phpunit.xml
+
+### Docker ###
+# Docker files are not needed in the container
+Dockerfile
+Dockerfile.*
+docker-compose.yml
+docker-compose.*.yml
+.dockerignore
+docker/
+
+### Development ###
+# IDE specific files/folders
+.idea/
+.vscode/
+.editorconfig
+
+# Local asset bundle trigger
+public/hot
+
+### Miscellaneous ###
+README.md
+GEMINI.md
+plan.md
+*.tar
+
+# Don't copy previous logs
+storage/logs/*.log
