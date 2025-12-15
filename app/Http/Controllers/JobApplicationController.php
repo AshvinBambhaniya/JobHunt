@@ -16,8 +16,8 @@ class JobApplicationController extends Controller
 
         if ($request->has('search')) {
             $query->where(function ($q) use ($request) {
-                $q->where('company_name', 'like', '%' . $request->search . '%')
-                  ->orWhere('role', 'like', '%' . $request->search . '%');
+                $q->where('company_name', 'like', '%'.$request->search.'%')
+                    ->orWhere('role', 'like', '%'.$request->search.'%');
             });
         }
 
@@ -63,6 +63,7 @@ class JobApplicationController extends Controller
         $application->logs()->create([
             'status' => 'applied',
             'event_date' => $validated['applied_date'],
+            'notes' => $validated['notes'] ?? null,
         ]);
 
         return redirect()->route('job-applications.index')

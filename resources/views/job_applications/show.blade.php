@@ -55,6 +55,14 @@
             </div>
         </div>
         <div>
+            @if($jobApplication->notes)
+            <div class="bg-white rounded-xl shadow-lg p-8 mb-8">
+                <h3 class="text-2xl font-bold text-gray-800 mb-6">Notes</h3>
+                <div class="text-gray-600">
+                    {!! nl2br(e($jobApplication->notes)) !!}
+                </div>
+            </div>
+            @endif
             <div class="bg-white rounded-xl shadow-lg p-8">
                 <h3 class="text-2xl font-bold text-gray-800 mb-6">Add New Log</h3>
                 <form action="{{ route('job-applications.logs.store', $jobApplication) }}" method="POST">
