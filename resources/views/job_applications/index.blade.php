@@ -10,17 +10,29 @@
     </div>
 
     <!-- Search and Filters -->
-    <div class="bg-white rounded-xl shadow-lg p-4 mb-4">
+    <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-5 mb-6">
         <form action="{{ route('job-applications.index') }}" method="GET">
-            <div class="grid grid-cols-1 md:grid-cols-5 gap-4">
-                <div class="md:col-span-2">
-                    <label for="search" class="block text-sm font-medium text-gray-700 mb-1">Search</label>
-                    <input type="text" name="search" id="search" value="{{ request('search') }}" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-indigo-500 focus:border-indigo-500 transition" placeholder="Search by company or role...">
+            <div class="flex flex-col lg:flex-row gap-4 items-end">
+                <!-- Search -->
+                <div class="w-full lg:flex-1">
+                    <label for="search" class="block text-xs font-semibold text-gray-500 uppercase tracking-wide mb-1.5">Search</label>
+                    <div class="relative">
+                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                            <svg class="h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                                <path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clip-rule="evenodd" />
+                            </svg>
+                        </div>
+                        <input type="text" name="search" id="search" value="{{ request('search') }}" 
+                            class="pl-10 block w-full rounded-lg border-gray-300 bg-gray-50 focus:bg-white focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm transition duration-150 ease-in-out py-2.5" 
+                            placeholder="Company, Role...">
+                    </div>
                 </div>
-                <div>
-                    <label for="status" class="block text-sm font-medium text-gray-700 mb-1">Status</label>
-                    <select name="status" id="status" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-indigo-500 focus:border-indigo-500 transition">
-                        <option value="">All</option>
+
+                <!-- Status Filter -->
+                <div class="w-full sm:w-1/2 lg:w-48">
+                    <label for="status" class="block text-xs font-semibold text-gray-500 uppercase tracking-wide mb-1.5">Status</label>
+                    <select name="status" id="status" class="block w-full rounded-lg border-gray-300 bg-gray-50 focus:bg-white focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm py-2.5">
+                        <option value="">All Statuses</option>
                         <option value="applied" @if(request('status') == 'applied') selected @endif>Applied</option>
                         <option value="shortlisted" @if(request('status') == 'shortlisted') selected @endif>Shortlisted</option>
                         <option value="interviewed" @if(request('status') == 'interviewed') selected @endif>Interviewed</option>
@@ -28,18 +40,40 @@
                         <option value="rejected" @if(request('status') == 'rejected') selected @endif>Rejected</option>
                     </select>
                 </div>
-                <div>
-                    <label for="job_type" class="block text-sm font-medium text-gray-700 mb-1">Job Type</label>
-                    <select name="job_type" id="job_type" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-indigo-500 focus:border-indigo-500 transition">
-                        <option value="">All</option>
+
+                <!-- Job Type Filter -->
+                <div class="w-full sm:w-1/2 lg:w-48">
+                    <label for="job_type" class="block text-xs font-semibold text-gray-500 uppercase tracking-wide mb-1.5">Job Type</label>
+                    <select name="job_type" id="job_type" class="block w-full rounded-lg border-gray-300 bg-gray-50 focus:bg-white focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm py-2.5">
+                        <option value="">All Types</option>
                         @foreach($jobTypes as $type)
                             <option value="{{ $type->value }}" @if(request('job_type') == $type->value) selected @endif>{{ ucfirst($type->value) }}</option>
                         @endforeach
                     </select>
                 </div>
-                <div class="flex justify-end items-end">
-                    <button type="submit" class="bg-indigo-600 text-white px-4 py-2 rounded-lg font-semibold hover:bg-indigo-700 transition">Filter</button>
-                    <a href="{{ route('job-applications.index') }}" class="ml-4 bg-gray-200 text-gray-800 px-4 py-2 rounded-lg font-semibold hover:bg-gray-300 transition">Reset</a>
+
+                <!-- Actions -->
+                <div class="flex gap-2 w-full lg:w-auto mt-2 lg:mt-0">
+                    <button type="submit" class="flex-1 lg:flex-none inline-flex justify-center items-center px-4 py-2.5 border border-transparent text-sm font-medium rounded-lg shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-colors">
+                        <svg class="h-4 w-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z"/>
+                        </svg>
+                        Filter
+                    </button>
+                    
+                    <a href="{{ route('job-applications.index') }}" class="flex-1 lg:flex-none inline-flex justify-center items-center px-4 py-2.5 border border-gray-300 shadow-sm text-sm font-medium rounded-lg text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-colors" title="Reset Filters">
+                        <svg class="h-4 w-4 lg:mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                        </svg>
+                        <span class="hidden lg:inline">Reset</span>
+                    </a>
+
+                    <a href="{{ route('job-applications.export', request()->query()) }}" class="flex-1 lg:flex-none inline-flex justify-center items-center px-4 py-2.5 border border-transparent text-sm font-medium rounded-lg shadow-sm text-white bg-emerald-600 hover:bg-emerald-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-emerald-500 transition-colors" title="Export CSV">
+                        <svg class="h-4 w-4 lg:mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/>
+                        </svg>
+                        <span class="hidden lg:inline">Export</span>
+                    </a>
                 </div>
             </div>
         </form>
@@ -58,6 +92,7 @@
                     <tr>
                         <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Company Name</th>
                         <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Role</th>
+                        <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Location</th>
                         <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Job Type</th>
                         <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Salary</th>
                         <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
@@ -70,6 +105,7 @@
                         <tr class="hover:bg-gray-50 transition">
                             <td class="px-4 py-2 whitespace-nowrap text-sm font-medium text-gray-900">{{ $app->company_name }}</td>
                             <td class="px-4 py-2 whitespace-nowrap text-sm text-gray-600">{{ $app->role }}</td>
+                            <td class="px-4 py-2 whitespace-nowrap text-sm text-gray-600">{{ $app->location }}</td>
                             <td class="px-4 py-2 whitespace-nowrap text-sm text-gray-600">{{ ucfirst($app->job_type->value) }}</td>
                             <td class="px-4 py-2 whitespace-nowrap text-sm text-gray-600">${{ number_format($app->expected_salary, 0) }}</td>
                             <td class="px-4 py-2 whitespace-nowrap">
