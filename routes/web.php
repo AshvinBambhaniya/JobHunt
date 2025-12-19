@@ -1,9 +1,9 @@
 <?php
 
-use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\JobApplicationController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\JobApplicationController;
 use App\Http\Controllers\JobApplicationLogController;
+use Illuminate\Support\Facades\Route;
 
 // GROUP 1: Guests (Not logged in)
 Route::middleware('guest')->group(function () {
@@ -16,12 +16,13 @@ Route::middleware('guest')->group(function () {
 // GROUP 2: Authenticated Users (Logged in)
 Route::middleware('auth')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
-    
+
     // Redirect root URL to the dashboard
     Route::get('/', function () {
         return redirect()->route('job-applications.index');
     });
 
+    Route::get('/job-applications/export', [JobApplicationController::class, 'export'])->name('job-applications.export');
     Route::resource('job-applications', JobApplicationController::class);
     Route::post('/job-applications/{job_application}/logs', [JobApplicationLogController::class, 'store'])->name('job-applications.logs.store');
 });

@@ -12,9 +12,58 @@ class JobApplicationController extends Controller
 {
     public function index(Request $request)
     {
+        $applications = $this->getFilteredQuery($request)
+            ->latest()
+            ->paginate(10);
+
+        return view('job_applications.index', [
+            'applications' => $applications,
+            'jobTypes' => JobType::cases(),
+        ]);
+    }
+
+    public function export(Request $request)
+    {
+        $applications = $this->getFilteredQuery($request)->latest()->get();
+
+        return response()->streamDownload(function () use ($applications) {
+            $handle = fopen('php://output', 'w');
+
+            // Header
+            fputcsv($handle, [
+                'Company Name',
+                'Role',
+                'Status',
+                'Job Type',
+                'Location',
+                'Expected Salary',
+                'Applied Date',
+                'Notes',
+            ]);
+
+            // Data
+            foreach ($applications as $app) {
+                fputcsv($handle, [
+                    $app->company_name,
+                    $app->role,
+                    ucfirst($app->status),
+                    $app->job_type?->value ?? 'N/A',
+                    $app->location,
+                    $app->expected_salary,
+                    $app->applied_date,
+                    $app->notes,
+                ]);
+            }
+
+            fclose($handle);
+        }, 'job_applications_'.date('Y-m-d').'.csv', ['Content-Type' => 'text/csv']);
+    }
+
+    private function getFilteredQuery(Request $request)
+    {
         $query = JobApplication::where('user_id', Auth::id());
 
-        if ($request->has('search')) {
+        if ($request->has('search') && $request->search) {
             $query->where(function ($q) use ($request) {
                 $q->where('company_name', 'like', '%'.$request->search.'%')
                     ->orWhere('role', 'like', '%'.$request->search.'%');
@@ -29,12 +78,7 @@ class JobApplicationController extends Controller
             $query->where('job_type', $request->job_type);
         }
 
-        $applications = $query->latest()->paginate(10);
-
-        return view('job_applications.index', [
-            'applications' => $applications,
-            'jobTypes' => JobType::cases(),
-        ]);
+        return $query;
     }
 
     public function create()
