@@ -25,6 +25,8 @@ class JobApplication extends Model
 
     protected $casts = [
         'job_type' => JobType::class,
+        'applied_date' => 'datetime',
+        'expected_salary' => 'decimal:2',
     ];
 
     public function user()
@@ -40,5 +42,10 @@ class JobApplication extends Model
     public function latestLog()
     {
         return $this->hasOne(JobApplicationLog::class)->latestOfMany();
+    }
+
+    public function reminders()
+    {
+        return $this->hasMany(Reminder::class);
     }
 }

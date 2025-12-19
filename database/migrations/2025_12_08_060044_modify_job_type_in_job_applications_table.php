@@ -15,7 +15,7 @@ return new class extends Migration
         DB::transaction(function () {
             // First, update any existing `NULL` values to a sensible default.
             DB::table('job_applications')->whereNull('job_type')->update(['job_type' => 'onsite']);
-            
+
             // Now, alter the table to make it non-nullable and set a default.
             Schema::table('job_applications', function (Blueprint $table) {
                 $table->string('job_type')->default('onsite')->nullable(false)->change();

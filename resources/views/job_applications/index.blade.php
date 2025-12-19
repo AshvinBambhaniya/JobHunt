@@ -86,7 +86,7 @@
                                     {{ ucfirst($app->status) }}
                                 </span>
                             </td>
-                            <td class="px-4 py-2 whitespace-nowrap text-sm text-gray-600">{{ \Carbon\Carbon::parse($app->applied_date)->format('M d, Y') }}</td>
+                            <td class="px-4 py-2 whitespace-nowrap text-sm text-gray-600">{{ $app->applied_date->format('M d, Y') }}</td>
                             <td class="px-4 py-2 whitespace-nowrap text-right text-sm font-medium">
                                 <div class="flex justify-end items-center">
                                     <a href="{{ route('job-applications.show', $app->id) }}" class="text-gray-500 hover:text-indigo-600 p-2">

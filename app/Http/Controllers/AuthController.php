@@ -10,16 +10,18 @@ use Illuminate\Support\Facades\Hash;
 class AuthController extends Controller
 {
     // Show Register Form
-    public function showRegister() {
+    public function showRegister()
+    {
         return view('auth.register');
     }
 
     // Handle Registration
-    public function register(Request $request) {
+    public function register(Request $request)
+    {
         $validated = $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|email|unique:users',
-            'password' => 'required|min:6|confirmed' // Expects password_confirmation field in form
+            'password' => 'required|min:6|confirmed', // Expects password_confirmation field in form
         ]);
 
         $user = User::create([
@@ -35,19 +37,22 @@ class AuthController extends Controller
     }
 
     // Show Login Form
-    public function showLogin() {
+    public function showLogin()
+    {
         return view('auth.login');
     }
 
     // Handle Login
-    public function login(Request $request) {
+    public function login(Request $request)
+    {
         $credentials = $request->validate([
             'email' => 'required|email',
-            'password' => 'required'
+            'password' => 'required',
         ]);
 
         if (Auth::attempt($credentials)) {
             $request->session()->regenerate();
+
             return redirect()->route('job-applications.index');
         }
 
@@ -57,10 +62,12 @@ class AuthController extends Controller
     }
 
     // Handle Logout
-    public function logout(Request $request) {
+    public function logout(Request $request)
+    {
         Auth::logout();
         $request->session()->invalidate();
         $request->session()->regenerateToken();
+
         return redirect()->route('login');
     }
 }

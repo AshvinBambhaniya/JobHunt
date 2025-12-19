@@ -15,4 +15,13 @@ class JobApplicationLog extends Model
         'event_date',
         'notes',
     ];
+
+    protected $casts = [
+        'event_date' => 'datetime',
+    ];
+
+    public function jobApplication()
+    {
+        return $this->belongsTo(JobApplication::class);
+    }
 }

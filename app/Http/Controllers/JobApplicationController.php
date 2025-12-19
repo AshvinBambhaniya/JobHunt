@@ -77,7 +77,9 @@ class JobApplicationController extends Controller
             abort(403, 'Unauthorized action.');
         }
 
-        $jobApplication->load('logs');
+        $jobApplication->load(['logs', 'reminders' => function ($q) {
+            $q->orderBy('scheduled_at', 'asc');
+        }]);
 
         return view('job_applications.show', compact('jobApplication'));
     }
